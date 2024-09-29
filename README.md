@@ -1,5 +1,5 @@
 # Pokedex Compose
-![License-GNU]([https://img.shields.io/badge/License-MIT-red.svg](https://img.shields.io/badge/License-GNU%20GPL-blue))
+![License-GNU](https://img.shields.io/badge/License-GNU%20GPL-blue)
 ![API-24+](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)
 
 <h2 align="center">Under construction</h2>
