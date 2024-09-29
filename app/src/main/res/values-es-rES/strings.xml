@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PokedexCompose</string>
+    <string name="home_title">¿Qué pokémon estás buscando?</string>
+    <string name="search_placeholder">Busca Pokémon, Movimiento, Habilidad, etc.</string>
+    <string name="pokedex">Pokédex</string>
+    <string name="moves">Movimientos</string>
+    <string name="abilities">Habilidades</string>
+    <string name="items">Objetos</string>
+    <string name="locations">Localizaciones</string>
+    <string name="type_charts">Gráfico de tipos</string>
+    <string name="news_title">Noticias Pokémon</string>
+    <string name="view_all">Ver Todo</string>
+    <string name="news_pokemon_url">https://www.pokemon.com/es/noticias-pokemon</string>
+    <string name="pokemon_new1">https://www.pokemon.com/es/noticias-pokemon/las-ilustraciones-de-la-expansion-escarlata-y-purpura-corona-astral-de-jcc-pokemon</string>
+    <string name="pokemon_new2">https://www.pokemon.com/es/noticias-pokemon/los-pokemon-de-tipo-dragon-que-dominaron-el-campeonato-mundial-pokemon-2024</string>
+    <string name="pokemon_new3">https://www.pokemon.com/es/estrategia/aprende-a-crear-un-equipo-para-el-reglamento-h-de-pokemon-escarlata-y-pokemon-purpura</string>
+    <string name="pokemon_new4">https://www.pokemon.com/es/noticias-pokemon/usa-los-datos-de-sueno-de-tu-reloj-inteligente-en-pokemon-sleep</string>
+    <string name="pokemon_new5">https://www.pokemon.com/es/noticias-pokemon/compite-ya-en-el-gran-desafio-i-de-2025</string>
+    <string name="pokemon_new6">https://www.pokemon.com/es/estrategia/las-mejores-cartas-competitivas-de-escarlata-y-purpura-corona-astral-de-jcc-pokemon</string>
+</resources>
