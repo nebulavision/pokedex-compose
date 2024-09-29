@@ -26,7 +26,7 @@ Pending...
 
 ## Built with
 
-- [compose](https://developer.android.com/jetpack/compose)
+- [Compose](https://developer.android.com/jetpack/compose)
 
 ## Tech Stack
 - Minimum SDK level 24.
