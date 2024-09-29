@@ -3,13 +3,14 @@ package com.github.nebulavision.pokedexcompose.data.repository
 import com.github.nebulavision.pokedexcompose.R
 import com.github.nebulavision.pokedexcompose.data.PokemonNew
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 //Api key by constructor if necessary
 class PokemonNewsRemoteDataSource{
     suspend fun getPokemonNews(): List<PokemonNew> {
         return withContext(Dispatchers.IO) {
+            delay(3000)
             listOf(
                 PokemonNew(
                     "Las ilustraciones de la expansión Escarlata y Púrpura-Corona Astral de JCC Pokémon",

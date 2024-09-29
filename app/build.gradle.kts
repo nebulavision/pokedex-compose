@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     ksp(libs.hilt.compiler)
+
+    debugImplementation(libs.androidx.ui.tooling)
 }

@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -55,11 +54,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.nebulavision.pokedexcompose.R
 import com.github.nebulavision.pokedexcompose.data.PokemonNew
-import com.github.nebulavision.pokedexcompose.data.repository.PokemonNewsRemoteDataSource
-import com.github.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
 
 @Composable
 fun HomeScreen(
@@ -75,9 +71,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val newsPokemonUrl = stringResource(R.string.news_pokemon_url)
 
-    Scaffold(
-        contentColor = Color.White
-    ){ paddingValues ->
+    Scaffold{ paddingValues ->
         Box(
             contentAlignment = Alignment.TopEnd,
             modifier = Modifier
@@ -87,7 +81,7 @@ fun HomeScreen(
         ){
             Column {
                 HomeHeader(
-                    title = { HomeTitle(text = R.string.home_title) },
+                    title = {HomeTitle(text = R.string.home_title) },
                     searchBar = {
                         SearchBar(
                             modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
@@ -97,6 +91,7 @@ fun HomeScreen(
                         )
                     },
                     sections = { HomeSections(
+                        modifier = Modifier.fillMaxWidth(),
                         onPokedexScreen = onPokedexScreen,
                         onMovesScreen = onMovesScreen,
                         onAbilitiesScreen = onAbilitiesScreen,
@@ -107,13 +102,10 @@ fun HomeScreen(
                 )
                 HomeNews(
                     modifier = Modifier.padding(dimensionResource(R.dimen.small_padding)),
-                    onViewAllClick = {
-                        viewModel.openPokemonUrl(context, newsPokemonUrl)
-                    },
+                    isLoading = homeUiState.isLoading,
+                    onViewAllClick = { viewModel.openPokemonUrl(context, newsPokemonUrl) },
                     pokemonNews = homeUiState.pokemonNews,
-                    onPokemonNewClick = {
-                        viewModel.openPokemonUrl(context, it)
-                    }
+                    onPokemonNewClick = { viewModel.openPokemonUrl(context, it) }
                 )
             }
             Image(
@@ -132,10 +124,8 @@ fun HomeTitle(modifier: Modifier = Modifier, @StringRes text: Int){
     Column(modifier = modifier) {
         Text(
             text = stringResource(text),
-            style = MaterialTheme.typography.titleLarge
-        )
+            style = MaterialTheme.typography.titleLarge)
     }
-
 }
 
 @Composable
@@ -169,8 +159,9 @@ fun SearchBar(modifier: Modifier = Modifier, searchText: String, onSearchChanged
 }
 
 @Composable
-fun HomeHeader(title: @Composable () -> Unit, searchBar: @Composable () -> Unit, sections: @Composable () -> Unit){
+fun HomeHeader(modifier: Modifier = Modifier, title: @Composable () -> Unit, searchBar: @Composable () -> Unit, sections: @Composable () -> Unit){
     Card(
+        modifier = modifier,
         shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
@@ -187,7 +178,6 @@ fun HomeHeader(title: @Composable () -> Unit, searchBar: @Composable () -> Unit,
     }
 }
 
-
 @Composable
 fun HomeSections(
     modifier: Modifier = Modifier,
@@ -199,49 +189,47 @@ fun HomeSections(
     onTypeChartsScreen: () -> Unit
 ){
     val smallPadding = dimensionResource(R.dimen.small_padding)
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+    Column(
         verticalArrangement = Arrangement.spacedBy(smallPadding),
-        horizontalArrangement = Arrangement.spacedBy(smallPadding),
         modifier = modifier.heightIn(max = 600.dp)
     ) {
-        item {
+        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.pokedex,
                 color = Color(0xFF4FC1A6),
                 onClick = onPokedexScreen
             )
-        }
-        item {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.moves,
                 color = Color(0xFFF7786B),
                 onClick = onMovesScreen
             )
         }
-        item {
+        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.abilities,
                 color = Color(0xFF58AAF6),
                 onClick = onAbilitiesScreen
             )
-        }
-        item {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.items,
                 color = Color(0xFFFFCE4B),
                 onClick = onItemsScreen
             )
         }
-        item {
+        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.locations,
                 color = Color(0xFF7C538C),
                 onClick = onLocationsScreen
             )
-        }
-        item {
             HomeSection(
+                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
                 text = R.string.type_charts,
                 color = Color(0xFFB1736C),
                 onClick = onTypeChartsScreen
@@ -254,8 +242,6 @@ fun HomeSections(
 fun HomeSection(modifier: Modifier = Modifier, @StringRes text: Int, color: Color, onClick: () -> Unit){
     Box(
         modifier = modifier
-            .size(100.dp, 60.dp)
-            .size(100.dp)
             .clip(MaterialTheme.shapes.small)
             .background(color)
             .clickable { onClick() },
@@ -293,11 +279,15 @@ fun HomeSection(modifier: Modifier = Modifier, @StringRes text: Int, color: Colo
 @Composable
 fun HomeNews(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     onViewAllClick: () -> Unit,
     pokemonNews: List<PokemonNew>,
     onPokemonNewClick: (String) -> Unit
 ){
-    Column(modifier = modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(dimensionResource(R.dimen.extra_small_padding))
@@ -317,17 +307,24 @@ fun HomeNews(
             )
         }
 
-        Column {
-            pokemonNews.forEach{
-                val pokemonNewUrl = stringResource(it.url)
-                NewItem(
-                    title = it.title,
-                    date = it.date,
-                    drawable = it.imageRes,
-                    onClick = { onPokemonNewClick(pokemonNewUrl) }
-                )
-            }
+        if(isLoading){
+            CircularProgressBox(modifier = Modifier.padding(top = 8.dp))
+        }else{
+            Column {
+                pokemonNews.forEach{
+                    val pokemonNewUrl = stringResource(it.url)
+                    NewItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = dimensionResource(R.dimen.extra_small_padding)),
+                        title = it.title,
+                        date = it.date,
+                        drawable = it.imageRes,
+                        onClick = { onPokemonNewClick(pokemonNewUrl) }
+                    )
+                }
 
+            }
         }
     }
 }
@@ -335,10 +332,7 @@ fun HomeNews(
 @Composable
 fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: String, date: String, @DrawableRes drawable: Int){
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = dimensionResource(R.dimen.extra_small_padding))
-            .clickable { onClick() },
+        modifier = modifier.clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -375,109 +369,129 @@ fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: Stri
     }
 }
 
+@Composable
+fun CircularProgressBox(modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = modifier
+    ){
+        CircularProgressIndicator(
+            modifier = Modifier
+                .width(40.dp)
+        )
+    }
+}
+
 /*
  * =========================================================================================================================================================================
  *                                                                             PREVIEWS
  * =========================================================================================================================================================================
  */
 
-@Preview(showBackground = true)
-@Composable
-fun HomeTitlePreview(){
-    PokedexComposeTheme {
-        HomeTitle(text = R.string.home_title)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchBarPreview(){
-    PokedexComposeTheme {
-        SearchBar(
-            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
-            searchText = "",
-            onSearchChanged = {},
-            onKeyboardDone = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NewItemPreview(){
-    PokedexComposeTheme {
-        NewItem(
-            title = "Aprende a crear un equipo para el reglamento H de Pokémon Escarlata y Pokémon Púrpura",
-            date = "24 de septiembre de 2024",
-            drawable = R.drawable.new2_preview
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeSectionPreview(){
-    PokedexComposeTheme {
-        HomeSection(
-            text = R.string.pokedex,
-            color = Color(0xFF4FC1A6)
-        ){}
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeSectionsPreview(){
-    PokedexComposeTheme {
-        HomeSections(
-            onPokedexScreen = {},
-            onMovesScreen = {},
-            onAbilitiesScreen = {},
-            onItemsScreen = {},
-            onLocationsScreen = {},
-            onTypeChartsScreen = {},
-            modifier = Modifier.padding(8.dp)
-        )
-    }
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeTitlePreview(){
+//    PokedexComposeTheme {
+//        HomeTitle(text = R.string.home_title)
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun SearchBarPreview(){
+//    PokedexComposeTheme {
+//        SearchBar(
+//            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
+//            searchText = "",
+//            onSearchChanged = {},
+//            onKeyboardDone = {}
+//        )
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun NewItemPreview(){
+//    PokedexComposeTheme {
+//        NewItem(
+//            title = "Aprende a crear un equipo para el reglamento H de Pokémon Escarlata y Pokémon Púrpura",
+//            date = "24 de septiembre de 2024",
+//            drawable = R.drawable.new2_preview
+//        )
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeSectionPreview(){
+//    PokedexComposeTheme {
+//        HomeSection(
+//            text = R.string.pokedex,
+//            color = Color(0xFF4FC1A6)
+//        ){}
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeSectionsPreview(){
+//    PokedexComposeTheme {
+//        HomeSections(
+//            onPokedexScreen = {},
+//            onMovesScreen = {},
+//            onAbilitiesScreen = {},
+//            onItemsScreen = {},
+//            onLocationsScreen = {},
+//            onTypeChartsScreen = {},
+//            modifier = Modifier.padding(8.dp)
+//        )
+//    }
+//}
+//
+//@Preview(showSystemUi = true)
+//@Composable
+//fun HomeHeaderPreview(){
+//    PokedexComposeTheme {
+//        HomeHeader(
+//            title = { HomeTitle(text = R.string.home_title) },
+//            searchBar = {
+//                SearchBar(
+//                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
+//                    searchText = "",
+//                    onSearchChanged = {},
+//                    onKeyboardDone = {}
+//                )
+//            },
+//            sections = { HomeSections(
+//                onPokedexScreen = {},
+//                onMovesScreen = {},
+//                onAbilitiesScreen = {},
+//                onItemsScreen = {},
+//                onLocationsScreen = {},
+//                onTypeChartsScreen = {}
+//            ) }
+//        )
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview(){
+//    PokedexComposeTheme {
+//        HomeScreen(
+//            onPokedexScreen = {},
+//            onMovesScreen = {},
+//            onAbilitiesScreen = {},
+//            onItemsScreen = {},
+//            onLocationsScreen = {},
+//            onTypeChartsScreen = {}
+//        )
+//    }
+//}
 
 @Preview(showSystemUi = true)
 @Composable
-fun HomeHeaderPreview(){
-    PokedexComposeTheme {
-        HomeHeader(
-            title = { HomeTitle(text = R.string.home_title) },
-            searchBar = {
-                SearchBar(
-                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
-                    searchText = "",
-                    onSearchChanged = {},
-                    onKeyboardDone = {}
-                )
-            },
-            sections = { HomeSections(
-                onPokedexScreen = {},
-                onMovesScreen = {},
-                onAbilitiesScreen = {},
-                onItemsScreen = {},
-                onLocationsScreen = {},
-                onTypeChartsScreen = {}
-            ) }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview(){
-    PokedexComposeTheme {
-        HomeScreen(
-            onPokedexScreen = {},
-            onMovesScreen = {},
-            onAbilitiesScreen = {},
-            onItemsScreen = {},
-            onLocationsScreen = {},
-            onTypeChartsScreen = {}
-        )
-    }
+private fun CircularProgressBoxPreview() {
+    CircularProgressBox()
 }

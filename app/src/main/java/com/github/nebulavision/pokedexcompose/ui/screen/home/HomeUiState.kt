@@ -4,5 +4,6 @@ import com.github.nebulavision.pokedexcompose.data.PokemonNew
 
 data class HomeUiState(
     val searchText: String = "",
-    val pokemonNews: List<PokemonNew> = listOf()
+    val pokemonNews: List<PokemonNew> = listOf(),
+    val isLoading: Boolean = true
 )

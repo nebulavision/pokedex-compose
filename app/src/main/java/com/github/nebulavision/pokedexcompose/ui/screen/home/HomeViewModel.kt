@@ -23,8 +23,10 @@ class HomeViewModel @Inject constructor(
     init{
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
-                pokemonNews = newsRepository.getAll()
+                pokemonNews = newsRepository.getAll(),
+                isLoading = false
             )
+
         }
     }
 
