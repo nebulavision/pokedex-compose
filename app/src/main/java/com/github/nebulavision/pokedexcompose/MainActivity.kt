@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -68,9 +69,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.github.nebulavision.pokedexcompose.ui.screen.AppNavigation
 import com.github.nebulavision.pokedexcompose.ui.screen.home.HomeScreen
+import com.github.nebulavision.pokedexcompose.ui.screen.home.HomeViewModel
 import com.github.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.sin
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +83,6 @@ class MainActivity : ComponentActivity() {
             PokedexComposeTheme {
                 val navController = rememberNavController()
                 AppNavigation(navController)
-                //HomeScreen()
             }
         }
     }

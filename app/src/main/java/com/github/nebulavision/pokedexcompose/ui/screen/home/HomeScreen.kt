@@ -54,9 +54,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.nebulavision.pokedexcompose.R
-import com.github.nebulavision.pokedexcompose.data.NewsDataSource
+import com.github.nebulavision.pokedexcompose.data.PokemonNew
+import com.github.nebulavision.pokedexcompose.data.repository.PokemonNewsRemoteDataSource
 import com.github.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
 
 @Composable
@@ -66,9 +68,9 @@ fun HomeScreen(
     onAbilitiesScreen: () -> Unit,
     onItemsScreen: () -> Unit,
     onLocationsScreen: () -> Unit,
-    onTypeChartsScreen: () -> Unit,
-    viewModel: HomeViewModel = viewModel()
+    onTypeChartsScreen: () -> Unit
 ){
+    val viewModel: HomeViewModel = hiltViewModel()
     val homeUiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val newsPokemonUrl = stringResource(R.string.news_pokemon_url)
@@ -108,7 +110,10 @@ fun HomeScreen(
                     onViewAllClick = {
                         viewModel.openPokemonUrl(context, newsPokemonUrl)
                     },
-                    viewModel = viewModel
+                    pokemonNews = homeUiState.pokemonNews,
+                    onPokemonNewClick = {
+                        viewModel.openPokemonUrl(context, it)
+                    }
                 )
             }
             Image(
@@ -289,9 +294,9 @@ fun HomeSection(modifier: Modifier = Modifier, @StringRes text: Int, color: Colo
 fun HomeNews(
     modifier: Modifier = Modifier,
     onViewAllClick: () -> Unit,
-    viewModel: HomeViewModel
+    pokemonNews: List<PokemonNew>,
+    onPokemonNewClick: (String) -> Unit
 ){
-    val context = LocalContext.current
     Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -313,48 +318,15 @@ fun HomeNews(
         }
 
         Column {
-            val url1 = stringResource(NewsDataSource.news[0].url)
-            NewItem(
-                title = NewsDataSource.news[0].title,
-                date = NewsDataSource.news[0].date,
-                drawable = NewsDataSource.news[0].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url1) }
-            )
-            val url2 = stringResource(NewsDataSource.news[1].url)
-            NewItem(
-                title = NewsDataSource.news[1].title,
-                date = NewsDataSource.news[1].date,
-                drawable = NewsDataSource.news[1].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url2) }
-            )
-            val url3 = stringResource(NewsDataSource.news[2].url)
-            NewItem(
-                title = NewsDataSource.news[2].title,
-                date = NewsDataSource.news[2].date,
-                drawable = NewsDataSource.news[2].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url3) }
-            )
-            val url4 = stringResource(NewsDataSource.news[3].url)
-            NewItem(
-                title = NewsDataSource.news[3].title,
-                date = NewsDataSource.news[3].date,
-                drawable = NewsDataSource.news[3].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url4) }
-            )
-            val url5 = stringResource(NewsDataSource.news[4].url)
-            NewItem(
-                title = NewsDataSource.news[4].title,
-                date = NewsDataSource.news[4].date,
-                drawable = NewsDataSource.news[4].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url5) }
-            )
-            val url6 = stringResource(NewsDataSource.news[5].url)
-            NewItem(
-                title = NewsDataSource.news[5].title,
-                date = NewsDataSource.news[5].date,
-                drawable = NewsDataSource.news[5].imageRes,
-                onClick = { viewModel.openPokemonUrl(context, url6) }
-            )
+            pokemonNews.forEach{
+                val pokemonNewUrl = stringResource(it.url)
+                NewItem(
+                    title = it.title,
+                    date = it.date,
+                    drawable = it.imageRes,
+                    onClick = { onPokemonNewClick(pokemonNewUrl) }
+                )
+            }
 
         }
     }

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.android.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -62,5 +64,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lyfecycle.viewmodel.compose)
-
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
+    ksp(libs.hilt.compiler)
 }
