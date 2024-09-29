@@ -1,6 +1,6 @@
-package com.github.nebulavision.pokedexcompose.data.repository
+package com.nebulavision.pokedexcompose.data.repository
 
-import com.github.nebulavision.pokedexcompose.data.PokemonNew
+import com.nebulavision.pokedexcompose.data.PokemonNew
 
 class PokemonNewsRepository(
     private val pokemonNewsRemoteDataSource: PokemonNewsRemoteDataSource

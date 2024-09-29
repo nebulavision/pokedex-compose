@@ -1,7 +1,7 @@
-package com.github.nebulavision.pokedexcompose.di
+package com.nebulavision.pokedexcompose.di
 
-import com.github.nebulavision.pokedexcompose.data.repository.PokemonNewsRemoteDataSource
-import com.github.nebulavision.pokedexcompose.data.repository.PokemonNewsRepository
+import com.nebulavision.pokedexcompose.data.repository.PokemonNewsRemoteDataSource
+import com.nebulavision.pokedexcompose.data.repository.PokemonNewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
-package com.github.nebulavision.pokedexcompose.ui.screen.home
+package com.nebulavision.pokedexcompose.ui.screen.home
 
-import com.github.nebulavision.pokedexcompose.data.PokemonNew
+import com.nebulavision.pokedexcompose.data.PokemonNew
 
 data class HomeUiState(
     val searchText: String = "",

@@ -1,7 +1,7 @@
-package com.github.nebulavision.pokedexcompose.data.repository
+package com.nebulavision.pokedexcompose.data.repository
 
-import com.github.nebulavision.pokedexcompose.R
-import com.github.nebulavision.pokedexcompose.data.PokemonNew
+import com.nebulavision.pokedexcompose.R
+import com.nebulavision.pokedexcompose.data.PokemonNew
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

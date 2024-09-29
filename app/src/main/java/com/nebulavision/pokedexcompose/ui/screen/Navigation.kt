@@ -1,10 +1,10 @@
-package com.github.nebulavision.pokedexcompose.ui.screen
+package com.nebulavision.pokedexcompose.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.nebulavision.pokedexcompose.ui.screen.home.HomeScreen
+import com.nebulavision.pokedexcompose.ui.screen.home.HomeScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController){

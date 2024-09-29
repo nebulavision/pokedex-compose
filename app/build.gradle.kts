@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.github.nebulavision.pokedexcompose"
+    namespace = "com.nebulavision.pokedexcompose"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.github.nebulavision.pokedexcompose"
+        applicationId = "com.nebulavision.pokedexcompose"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

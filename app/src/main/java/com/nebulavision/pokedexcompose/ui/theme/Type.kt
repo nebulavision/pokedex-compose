@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose.ui.theme
+package com.nebulavision.pokedexcompose.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

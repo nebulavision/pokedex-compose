@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose.ui.theme
+package com.nebulavision.pokedexcompose.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

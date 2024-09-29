@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose.data
+package com.nebulavision.pokedexcompose.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

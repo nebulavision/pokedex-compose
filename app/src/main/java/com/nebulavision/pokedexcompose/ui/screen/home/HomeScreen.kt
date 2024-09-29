@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose.ui.screen.home
+package com.nebulavision.pokedexcompose.ui.screen.home
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -54,8 +54,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.github.nebulavision.pokedexcompose.R
-import com.github.nebulavision.pokedexcompose.data.PokemonNew
+import com.nebulavision.pokedexcompose.R
+import com.nebulavision.pokedexcompose.data.PokemonNew
 
 @Composable
 fun HomeScreen(

@@ -1,11 +1,11 @@
-package com.github.nebulavision.pokedexcompose.ui.screen.home
+package com.nebulavision.pokedexcompose.ui.screen.home
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.nebulavision.pokedexcompose.data.repository.PokemonNewsRepository
+import com.nebulavision.pokedexcompose.data.repository.PokemonNewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

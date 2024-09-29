@@ -1,6 +1,5 @@
-package com.github.nebulavision.pokedexcompose.ui.theme
+package com.nebulavision.pokedexcompose.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

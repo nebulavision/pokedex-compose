@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose.ui.screen
+package com.nebulavision.pokedexcompose.ui.screen
 
 enum class Screens {
     HOME,

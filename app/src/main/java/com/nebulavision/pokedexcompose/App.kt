@@ -1,4 +1,4 @@
-package com.github.nebulavision.pokedexcompose
+package com.nebulavision.pokedexcompose
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
