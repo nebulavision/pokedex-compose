@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PokedexCompose</string>
     <string name="home_title">What Pokemon are you looking for?</string>
-    <string name="news_title">Pokemon News</string>
+    <string name="news_title">News</string>
     <string name="search_placeholder">Search Pokemon, Move, Ability, etc.</string>
     <string name="pokedex">Pokedex</string>
     <string name="moves">Moves</string>
@@ -9,7 +9,6 @@
     <string name="items">Items</string>
     <string name="locations">Locations</string>
     <string name="type_charts">Type Charts</string>
-    <string name="view_all">View All</string>
     <string name="news_pokemon_url">https://www.pokemon.com/us/pokemon-news</string>
     <string name="pokemon_new1">https://www.pokemon.com/us/pokemon-news/art-of-the-pokemon-tcg-scarlet-violet-stellar-crown-expansion</string>
     <string name="pokemon_new2">https://www.pokemon.com/us/pokemon-news/dragon-type-pokemon-that-dominated-the-2024-pokemon-world-championships</string>
@@ -17,4 +16,24 @@
     <string name="pokemon_new4">https://www.pokemon.com/us/pokemon-news/use-sleep-data-from-your-smartwatch-in-pokemon-sleep</string>
     <string name="pokemon_new5">https://www.pokemon.com/us/pokemon-news/battle-now-in-the-2025-grand-challenge-i-online-competition</string>
     <string name="pokemon_new6">https://www.pokemon.com/us/strategy/pokemon-tcg-scarlet-violet-stellar-crown-top-competitive-cards</string>
+    <string name="go_back">Go Back</string>
+
+    <string name="type_normal">Normal</string>
+    <string name="type_fire">Fire</string>
+    <string name="type_water">Water</string>
+    <string name="type_electric">Electric</string>
+    <string name="type_grass">Grass</string>
+    <string name="type_ice">Ice</string>
+    <string name="type_fighting">Fighting</string>
+    <string name="type_poison">Poison</string>
+    <string name="type_ground">Ground</string>
+    <string name="type_flying">Flying</string>
+    <string name="type_psychic">Psychic</string>
+    <string name="type_bug">Bug</string>
+    <string name="type_rock">Rock</string>
+    <string name="type_ghost">Ghost</string>
+    <string name="type_dragon">Dragon</string>
+    <string name="type_dark">Dark</string>
+    <string name="type_steel">Steel</string>
+    <string name="type_fairy">Fairy</string>
 </resources>

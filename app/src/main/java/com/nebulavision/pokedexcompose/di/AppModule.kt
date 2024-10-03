@@ -1,7 +1,10 @@
 package com.nebulavision.pokedexcompose.di
 
-import com.nebulavision.pokedexcompose.data.repository.PokemonNewsRemoteDataSource
-import com.nebulavision.pokedexcompose.data.repository.PokemonNewsRepository
+import com.nebulavision.data.database.dao.PokemonDao
+import com.nebulavision.data.repository.datasource.PokemonNewsDataSource
+import com.nebulavision.data.network.PokemonApiService
+import com.nebulavision.data.repository.datasource.PokemonRemoteDataSource
+import com.nebulavision.data.repository.PokemonRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,13 +17,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePokemonNewsRemoteDataSource(): PokemonNewsRemoteDataSource{
-        return PokemonNewsRemoteDataSource()
+    fun providePokemonRemoteDataSource(pokemonApiService: PokemonApiService): PokemonRemoteDataSource {
+        return PokemonRemoteDataSource(pokemonApiService)
     }
 
     @Provides
     @Singleton
-    fun providePokemonNewsRepository(pokemonNewsRemoteDataSource: PokemonNewsRemoteDataSource): PokemonNewsRepository{
-        return PokemonNewsRepository(pokemonNewsRemoteDataSource)
+    fun providePokemonRepository(pokemonRemoteDataSource: PokemonRemoteDataSource, pokemonDao: PokemonDao): PokemonRepository {
+        return PokemonRepository(pokemonRemoteDataSource, pokemonDao)
     }
 }

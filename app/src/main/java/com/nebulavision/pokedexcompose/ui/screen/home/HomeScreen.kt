@@ -28,7 +28,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -54,8 +53,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.nebulavision.pokedexcompose.R
-import com.nebulavision.pokedexcompose.data.PokemonNew
+import com.nebulavision.pokedexcompose.model.PokemonNew
+import com.nebulavision.pokedexcompose.ui.screen.common.CircularProgressBox
 
 @Composable
 fun HomeScreen(
@@ -67,7 +69,7 @@ fun HomeScreen(
     onTypeChartsScreen: () -> Unit
 ){
     val viewModel: HomeViewModel = hiltViewModel()
-    val homeUiState by viewModel.uiState.collectAsState()
+    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val newsPokemonUrl = stringResource(R.string.news_pokemon_url)
 
@@ -81,7 +83,7 @@ fun HomeScreen(
         ){
             Column {
                 HomeHeader(
-                    title = {HomeTitle(text = R.string.home_title) },
+                    title = { HomeTitle(text = R.string.home_title) },
                     searchBar = {
                         SearchBar(
                             modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
@@ -98,14 +100,8 @@ fun HomeScreen(
                         onItemsScreen = onItemsScreen,
                         onLocationsScreen = onLocationsScreen,
                         onTypeChartsScreen = onTypeChartsScreen,
+                        onNewsIntent = { viewModel.openPokemonUrl(context, newsPokemonUrl) }
                     ) }
-                )
-                HomeNews(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.small_padding)),
-                    isLoading = homeUiState.isLoading,
-                    onViewAllClick = { viewModel.openPokemonUrl(context, newsPokemonUrl) },
-                    pokemonNews = homeUiState.pokemonNews,
-                    onPokemonNewClick = { viewModel.openPokemonUrl(context, it) }
                 )
             }
             Image(
@@ -186,54 +182,84 @@ fun HomeSections(
     onAbilitiesScreen: () -> Unit,
     onItemsScreen: () -> Unit,
     onLocationsScreen: () -> Unit,
-    onTypeChartsScreen: () -> Unit
+    onTypeChartsScreen: () -> Unit,
+    onNewsIntent: () -> Unit
 ){
     val smallPadding = dimensionResource(R.dimen.small_padding)
     Column(
-        verticalArrangement = Arrangement.spacedBy(smallPadding),
-        modifier = modifier.heightIn(max = 600.dp)
+        modifier = modifier.heightIn(max = 600.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.large_padding))
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.pokedex,
-                color = Color(0xFF4FC1A6),
-                onClick = onPokedexScreen
-            )
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.moves,
-                color = Color(0xFFF7786B),
-                onClick = onMovesScreen
-            )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(smallPadding)
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.pokedex,
+                    color = Color(0xFF4FC1A6),
+                    onClick = onPokedexScreen
+                )
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.moves,
+                    color = Color(0xFFF7786B),
+                    onClick = onMovesScreen
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.abilities,
+                    color = Color(0xFF58AAF6),
+                    onClick = onAbilitiesScreen
+                )
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.items,
+                    color = Color(0xFFFFCE4B),
+                    onClick = onItemsScreen
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.locations,
+                    color = Color(0xFF7C538C),
+                    onClick = onLocationsScreen
+                )
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.type_charts,
+                    color = Color(0xFFB1736C),
+                    onClick = onTypeChartsScreen
+                )
+            }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.abilities,
-                color = Color(0xFF58AAF6),
-                onClick = onAbilitiesScreen
-            )
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.items,
-                color = Color(0xFFFFCE4B),
-                onClick = onItemsScreen
-            )
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.locations,
-                color = Color(0xFF7C538C),
-                onClick = onLocationsScreen
-            )
-            HomeSection(
-                modifier = Modifier.size(100.dp, 60.dp).weight(1f),
-                text = R.string.type_charts,
-                color = Color(0xFFB1736C),
-                onClick = onTypeChartsScreen
-            )
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(smallPadding)) {
+                HomeSection(
+                    modifier = Modifier
+                        .size(100.dp, 60.dp)
+                        .weight(1f),
+                    text = R.string.news_title,
+                    color = Color(0xFF82BAF0),
+                    onClick = onNewsIntent
+                )
+                Spacer(Modifier.weight(1F))
+            }
         }
     }
 }
@@ -276,6 +302,9 @@ fun HomeSection(modifier: Modifier = Modifier, @StringRes text: Int, color: Colo
     }
 }
 
+
+
+/*
 @Composable
 fun HomeNews(
     modifier: Modifier = Modifier,
@@ -312,14 +341,14 @@ fun HomeNews(
         }else{
             Column {
                 pokemonNews.forEach{
-                    val pokemonNewUrl = stringResource(it.url)
+                    val pokemonNewUrl = it.url
                     NewItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = dimensionResource(R.dimen.extra_small_padding)),
                         title = it.title,
                         date = it.date,
-                        drawable = it.imageRes,
+                        imageUrl = it.imageUrl,
                         onClick = { onPokemonNewClick(pokemonNewUrl) }
                     )
                 }
@@ -330,7 +359,7 @@ fun HomeNews(
 }
 
 @Composable
-fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: String, date: String, @DrawableRes drawable: Int){
+fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: String, date: String, imageUrl: String){
     Card(
         modifier = modifier.clickable { onClick() },
         colors = CardDefaults.cardColors(
@@ -357,8 +386,8 @@ fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: Stri
                 )
             }
             Spacer(Modifier.width(4.dp))
-            Image(
-                painter = painterResource(drawable),
+            AsyncImage(
+                model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -368,19 +397,8 @@ fun NewItem(modifier: Modifier = Modifier, onClick: () -> Unit = {}, title: Stri
         }
     }
 }
+*/
 
-@Composable
-fun CircularProgressBox(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = modifier
-    ){
-        CircularProgressIndicator(
-            modifier = Modifier
-                .width(40.dp)
-        )
-    }
-}
 
 /*
  * =========================================================================================================================================================================

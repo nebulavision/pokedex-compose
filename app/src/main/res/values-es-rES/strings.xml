@@ -9,7 +9,7 @@
     <string name="items">Objetos</string>
     <string name="locations">Localizaciones</string>
     <string name="type_charts">Gráfico de tipos</string>
-    <string name="news_title">Noticias Pokémon</string>
+    <string name="news_title">Noticias</string>
     <string name="view_all">Ver Todo</string>
     <string name="news_pokemon_url">https://www.pokemon.com/es/noticias-pokemon</string>
     <string name="pokemon_new1">https://www.pokemon.com/es/noticias-pokemon/las-ilustraciones-de-la-expansion-escarlata-y-purpura-corona-astral-de-jcc-pokemon</string>
@@ -18,4 +18,24 @@
     <string name="pokemon_new4">https://www.pokemon.com/es/noticias-pokemon/usa-los-datos-de-sueno-de-tu-reloj-inteligente-en-pokemon-sleep</string>
     <string name="pokemon_new5">https://www.pokemon.com/es/noticias-pokemon/compite-ya-en-el-gran-desafio-i-de-2025</string>
     <string name="pokemon_new6">https://www.pokemon.com/es/estrategia/las-mejores-cartas-competitivas-de-escarlata-y-purpura-corona-astral-de-jcc-pokemon</string>
+    <string name="go_back">Atrás</string>
+
+    <string name="type_normal">Normal</string>
+    <string name="type_fire">Fuego</string>
+    <string name="type_water">Agua</string>
+    <string name="type_electric">Eléctrico</string>
+    <string name="type_grass">Planta</string>
+    <string name="type_ice">Hielo</string>
+    <string name="type_fighting">Lucha</string>
+    <string name="type_poison">Veneno</string>
+    <string name="type_ground">Tierra</string>
+    <string name="type_flying">Volador</string>
+    <string name="type_psychic">Psíquico</string>
+    <string name="type_bug">Bicho</string>
+    <string name="type_rock">Roca</string>
+    <string name="type_ghost">Fantasma</string>
+    <string name="type_dragon">Dragón</string>
+    <string name="type_dark">Siniestro</string>
+    <string name="type_steel">Acero</string>
+    <string name="type_fairy">Hada</string>
 </resources>
