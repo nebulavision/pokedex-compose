@@ -298,7 +298,6 @@ fun HomeSection(modifier: Modifier = Modifier, @StringRes text: Int, color: Colo
         )
         Text(
             text = stringResource(text),
-            color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = dimensionResource(R.dimen.extra_small_padding))
