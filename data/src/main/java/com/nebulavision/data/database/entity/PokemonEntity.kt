@@ -13,6 +13,8 @@ data class PokemonEntity(
     val name: String,
     @ColumnInfo("image_url")
     val imageUrl: String,
+    @ColumnInfo("genus")
+    val genus: String,
     @ColumnInfo("types")
     val types: List<String>
 )

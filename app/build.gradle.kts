@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -38,6 +40,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-Xcontext-receivers" //Para activar los context receiver de kotlin
     }
     buildFeatures {
         compose = true
@@ -69,6 +72,7 @@ dependencies {
     implementation(libs.hilt.navigation)
     ksp(libs.hilt.compiler)
     implementation(libs.coil)
+    implementation(libs.kotlinx.serialization)
     implementation(project(":data"))
 
     debugImplementation(libs.androidx.ui.tooling)

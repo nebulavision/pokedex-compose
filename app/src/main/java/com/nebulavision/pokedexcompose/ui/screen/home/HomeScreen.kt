@@ -1,10 +1,10 @@
 package com.nebulavision.pokedexcompose.ui.screen.home
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,52 +12,44 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.nebulavision.pokedexcompose.R
-import com.nebulavision.pokedexcompose.model.PokemonNew
+import com.nebulavision.pokedexcompose.isNetworkAvailable
+import com.nebulavision.pokedexcompose.model.Pokemon
+import com.nebulavision.pokedexcompose.toast
 import com.nebulavision.pokedexcompose.ui.screen.common.CircularProgressBox
+import com.nebulavision.pokedexcompose.ui.screen.common.ExpandableSearchBar
 
 @Composable
 fun HomeScreen(
@@ -74,23 +66,41 @@ fun HomeScreen(
     val newsPokemonUrl = stringResource(R.string.news_pokemon_url)
 
     Scaffold{ paddingValues ->
+        val focusManager = LocalFocusManager.current
         Box(
             contentAlignment = Alignment.TopEnd,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
+                .pointerInput(Unit) {
+                    // Detecta cualquier clic en la pantalla
+                    detectTapGestures {
+                        focusManager.clearFocus() // Quita el foco cuando se hace clic en cualquier parte
+                    }
+                }
         ){
             Column {
                 HomeHeader(
                     title = { HomeTitle(text = R.string.home_title) },
                     searchBar = {
-                        SearchBar(
+                        val pokemons = homeUiState.pokemonSearch
+                        ExpandableSearchBar(
+                            query = homeUiState.searchText,
+                            onQueryChange = { viewModel.onSearchTextChanged(context.isNetworkAvailable, it) },
                             modifier = Modifier.padding(vertical = dimensionResource(R.dimen.large_padding)),
-                            searchText = homeUiState.searchText,
-                            onSearchChanged = { viewModel.onSearchTextChanged(it) },
-                            onKeyboardDone = { viewModel.onSearchAction() }
-                        )
+                            focusManager = focusManager,
+                            onDismiss = { viewModel.onSearchTextChanged(context.isNetworkAvailable, "") }
+                        ){
+                            pokemons.forEach {
+                                PokemonSuggestionItem(
+                                    pokemon = it,
+                                    onClick = { pokemonId ->
+                                        context.toast("ID: $pokemonId")
+                                    }
+                                )
+                            }
+                        }
                     },
                     sections = { HomeSections(
                         modifier = Modifier.fillMaxWidth(),
@@ -124,35 +134,28 @@ fun HomeTitle(modifier: Modifier = Modifier, @StringRes text: Int){
     }
 }
 
-@Composable
-fun SearchBar(modifier: Modifier = Modifier, searchText: String, onSearchChanged: (String) -> Unit, onKeyboardDone: () -> Unit){
-    TextField(
-        value = searchText,
-        onValueChange = onSearchChanged,
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null
-            )
-        },
-        placeholder = {
-            Text(
-                text = stringResource(R.string.search_placeholder),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onDone = { onKeyboardDone() }),
-        shape = CircleShape,
-        colors = TextFieldDefaults.colors(
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
 
-        ),
-        modifier = modifier.fillMaxWidth())
+
+@Composable
+fun PokemonSuggestionItem(pokemon: Pokemon, onClick: (String) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.extra_small_padding)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.small_padding))
+            .clickable { onClick(pokemon.id) }
+    ) {
+        AsyncImage(
+            model = pokemon.imageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(32.dp)
+        )
+        Text(text = pokemon.name, modifier = Modifier.fillMaxWidth())
+    }
 }
+
 
 @Composable
 fun HomeHeader(modifier: Modifier = Modifier, title: @Composable () -> Unit, searchBar: @Composable () -> Unit, sections: @Composable () -> Unit){
@@ -170,6 +173,7 @@ fun HomeHeader(modifier: Modifier = Modifier, title: @Composable () -> Unit, sea
             title()
             searchBar()
             sections()
+
         }
     }
 }

@@ -1,13 +1,46 @@
 package com.nebulavision.pokedexcompose
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.Toast
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import com.nebulavision.pokedexcompose.model.Pokemon
 import com.nebulavision.pokedexcompose.ui.theme.colorMap
 
 fun String.padWithZeros() = padStart(4, '0')
 
-fun Pokemon.getBackgroundColor(pokemonType: Int): Color {
-    return when (pokemonType) {
+fun String.capitalizeWithLocale() = capitalize(Locale.current)
+
+
+fun Context.toast(message: String){
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+val Context.isNetworkAvailable: Boolean
+    get() {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return getCurrentConnectivityState(cm)
+    }
+
+private fun getCurrentConnectivityState(connectivityManager: ConnectivityManager): Boolean {
+    val nw = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+
+    return when{
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
+        else -> false
+    }
+}
+
+fun Pokemon.getBackgroundColor(): Color {
+    return when (types[0]) {
         R.string.type_normal -> colorMap["type_normal"]!!
         R.string.type_fire -> colorMap["type_fire"]!!
         R.string.type_water -> colorMap["type_water"]!!

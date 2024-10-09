@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PokedexCompose</string>
+    <string name="app_name">Pokédex</string>
     <string name="home_title">What Pokemon are you looking for?</string>
     <string name="news_title">News</string>
     <string name="search_placeholder">Search Pokemon, Move, Ability, etc.</string>
@@ -36,4 +36,16 @@
     <string name="type_dark">Dark</string>
     <string name="type_steel">Steel</string>
     <string name="type_fairy">Fairy</string>
+    <string name="welcome_message_title">Welcome to your Pokédex!</string>
+    <string name="view_all">View all</string>
+    <string name="welcome_message_title_body">We’re excited to have you join on this incredible adventure. Explore a world filled with fascinating Pokémon, each with their own unique abilities and characteristics. Get ready to discover them all and become a true Pokémon master!</string>
+    <string name="welcome_message_body">We are downloading additional data.</string>
+    <string name="welcome_message_body_body">This may take a moment. We appreciate your patience as we prepare the best experience for you.</string>
+    <string name="downloading">"Downloading: "</string>
+    <string name="calculating_data">Calculating…</string>
+    <string name="error">An error has occurred, please try again later.</string>
+    <string name="about">About</string>
+    <string name="stats">Base Stats</string>
+    <string name="evolution">Evolution</string>
+    <string name="moves_short">Moves</string>
 </resources>

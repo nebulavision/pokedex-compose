@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import com.nebulavision.pokedexcompose.ui.screen.AppNavigation
+import com.nebulavision.pokedexcompose.ui.screen.navigation.AppNavigation
 import com.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

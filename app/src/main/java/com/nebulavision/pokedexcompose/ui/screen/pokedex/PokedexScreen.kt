@@ -1,7 +1,6 @@
-package com.nebulavision.pokedexcompose.ui.screen.detail
+package com.nebulavision.pokedexcompose.ui.screen.pokedex
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +28,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,22 +45,28 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.nebulavision.pokedexcompose.R
 import com.nebulavision.pokedexcompose.getBackgroundColor
+import com.nebulavision.pokedexcompose.isNetworkAvailable
 import com.nebulavision.pokedexcompose.model.Pokemon
 import com.nebulavision.pokedexcompose.ui.screen.common.CircularProgressBox
 import com.nebulavision.pokedexcompose.ui.screen.common.EndlessLazyVerticalGrid
 import com.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
+import java.util.Locale
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PokedexScreen(
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onPokemonClicked: (pokemon: Pokemon) -> Unit
 ) {
     val viewmodel: PokedexViewModel = hiltViewModel()
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    viewmodel.fetchMore(context.isNetworkAvailable, Locale.getDefault().language)
 
     PokedexComposeTheme {
         Scaffold(
+            modifier = Modifier,
             topBar = { AppTopBar { onBackClicked() } }
         ) { padding ->
             EndlessLazyVerticalGrid(
@@ -78,10 +82,10 @@ fun PokedexScreen(
                 itemContent = { pokemon: Pokemon ->
                     PokemonEntry(
                         pokemon = pokemon,
-                        onClick = {}
+                        onClick = { onPokemonClicked(pokemon) }
                     )
                 },
-                loadMore = { viewmodel.fetchMore() },
+                loadMore = { viewmodel.fetchMore(context.isNetworkAvailable, Locale.getDefault().language) },
                 isLoading = uiState.isLoading,
                 loadingItem = {
                     CircularProgressBox(modifier = Modifier
@@ -100,7 +104,7 @@ fun PokemonEntry(
     pokemon: Pokemon,
     onClick: () -> Unit
 ) {
-    val backgroundColor = pokemon.getBackgroundColor(pokemon.types[0])
+    val backgroundColor = pokemon.getBackgroundColor()
     Card (
         elevation = CardDefaults.cardElevation(20.dp),
         colors = CardDefaults.cardColors(backgroundColor),
@@ -211,45 +215,14 @@ fun AppTopBar(
 }
 
 
-@Composable
-fun AppTopBar2(
-    modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-    ){
-        IconButton(onClick = onBackClicked) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.go_back)
-            )
-        }
-
-        Text(
-            text = stringResource(R.string.pokedex),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(Modifier.weight(1F))
-        Image(
-            painter = painterResource(R.drawable.pokeball),
-            contentDescription = null,
-            alpha = 0.2F,
-            modifier = Modifier
-                .size(150.dp)
-                .offset(x = 50.dp, y = (-20).dp)
-                //.scale(2F)
-        )
-    }
-}
-
 @Preview(showSystemUi = true, widthDp = 400)
 @Composable
 private fun PokedexScreenPreview() {
     PokedexComposeTheme {
-        PokedexScreen {  }
+        PokedexScreen(
+            onBackClicked = {},
+            onPokemonClicked = {}
+        )
     }
 }
 

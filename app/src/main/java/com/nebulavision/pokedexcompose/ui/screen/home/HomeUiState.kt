@@ -1,9 +1,9 @@
 package com.nebulavision.pokedexcompose.ui.screen.home
 
-import com.nebulavision.pokedexcompose.model.PokemonNew
+import com.nebulavision.pokedexcompose.model.Pokemon
 
 data class HomeUiState(
     val searchText: String = "",
-    val pokemonNews: List<PokemonNew> = listOf(),
+    val pokemonSearch: List<Pokemon> = listOf(),
     val isLoading: Boolean = true
 )

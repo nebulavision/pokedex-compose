@@ -1,4 +1,4 @@
-package com.nebulavision.pokedexcompose.ui.screen.detail
+package com.nebulavision.pokedexcompose.ui.screen.pokedex
 
 import com.nebulavision.pokedexcompose.model.Pokemon
 

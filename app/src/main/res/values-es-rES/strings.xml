@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PokedexCompose</string>
+    <string name="app_name">Pokédex</string>
     <string name="home_title">¿Qué pokémon estás buscando?</string>
     <string name="search_placeholder">Busca Pokémon, Movimiento, Habilidad, etc.</string>
     <string name="pokedex">Pokédex</string>
@@ -38,4 +38,15 @@
     <string name="type_dark">Siniestro</string>
     <string name="type_steel">Acero</string>
     <string name="type_fairy">Hada</string>
+    <string name="welcome_message_title">¡Bienvenido a tu Pokédex!</string>
+    <string name="welcome_message_title_body">Estamos emocionados de que te unas en esta increíble aventura. Explora un mundo lleno de fascinantes Pokémon, cada uno con sus propias habilidades y características únicas. ¡Prepárate para descubrirlos todos y convertirte en un verdadero maestro Pokémon!</string>
+    <string name="welcome_message_body">Estamos descargando datos adicionales.</string>
+    <string name="welcome_message_body_body">Esto puede tardar un momento. Apreciamos tu paciencia mientras preparamos la mejor experiencia para ti.</string>
+    <string name="downloading">"Descargando: "</string>
+    <string name="calculating_data">Calculando…</string>
+    <string name="error">Ha ocurrido un error, por favor, inténtelo más tarde</string>
+    <string name="about">Acerca</string>
+    <string name="stats">Stats</string>
+    <string name="evolution">Evolución</string>
+    <string name="moves_short">Movs.</string>
 </resources>
