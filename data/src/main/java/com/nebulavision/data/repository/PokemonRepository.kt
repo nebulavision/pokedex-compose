@@ -1,5 +1,6 @@
 package com.nebulavision.data.repository
 
+import android.util.Log
 import com.google.gson.JsonParseException
 import com.nebulavision.data.database.dao.PokemonDao
 import com.nebulavision.data.database.entity.PokemonEntity
@@ -158,11 +159,11 @@ class PokemonRepository @Inject constructor(
         val genra = pokemon.genera.first { genra ->
             genra.language.name == "es"
         }
-
+        Log.d("REPO","https://img.pokemondb.net/sprites/home/normal/${normalizeNameForImageUrl(pokemon.enName)}.png")
         val pokemonEntity = PokemonEntity(
             id = pokemon.id,
             name = pokemon.name,
-            imageUrl = "https://img.pokemondb.net/sprites/home/normal/${pokemon.enName}.png",
+            imageUrl = "https://img.pokemondb.net/sprites/home/normal/${normalizeNameForImageUrl(pokemon.enName)}.png",
             genus = genra.genus,
             types = pokemonTypes
         )
@@ -173,5 +174,14 @@ class PokemonRepository @Inject constructor(
         val regex = """.*/(\d+)/?$""".toRegex()
 
         return regex.find(url)!!.groupValues[1].toInt()
+    }
+
+    private fun normalizeNameForImageUrl(pokemonName: String): String{
+        return when{
+            pokemonName.contains("♂") -> pokemonName.replace("♂", "-m")
+            pokemonName.contains("♀") -> pokemonName.replace("♀", "-f")
+            pokemonName.contains(". ") -> pokemonName.replace(". ", "-")
+            else -> pokemonName
+        }
     }
 }
