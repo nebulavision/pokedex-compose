@@ -7,5 +7,5 @@ data class PokemonDetailsUiState(
     val previousPokemonImageUrl: String? = null,
     val pokemon: Pokemon? = null,
     val nextPokemonImageUrl: String? = null,
-    val error: String = ""
+    val error: String? = null
 )

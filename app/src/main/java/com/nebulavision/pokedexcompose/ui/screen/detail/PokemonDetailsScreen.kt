@@ -9,29 +9,30 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -39,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,16 +60,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.nebulavision.pokedexcompose.R
 import com.nebulavision.pokedexcompose.getBackgroundColor
-import com.nebulavision.pokedexcompose.isNetworkAvailable
 import com.nebulavision.pokedexcompose.model.Pokemon
 import com.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
 import kotlinx.coroutines.launch
@@ -76,9 +75,10 @@ import kotlinx.coroutines.launch
 fun PokemonDetailsScreen(
     onBackClicked: () -> Unit
 ) {
-    val context = LocalContext.current
     val viewModel: PokemonDetailsViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     PokedexComposeTheme {
         PokedexComposeTheme {
@@ -88,33 +88,42 @@ fun PokemonDetailsScreen(
                     AppBar(
                         backgroundColor = uiState.pokemon?.getBackgroundColor() ?: Color.Transparent
                     ) { onBackClicked() }
-                }
+                },
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
             ) {
-                if (uiState.isLoading) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        CircularProgressIndicator(modifier = Modifier.padding(it))
-                    }
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .padding(it)
-                            .background(uiState.pokemon!!.getBackgroundColor())
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Header(
-                            pokemon = uiState.pokemon
-                                ?: throw Exception("Error in PokemonDetailsScreen::PokemonDetailsScreen()")
-                        )
+                Column(
+                    modifier = Modifier
+                        .padding(it)
+                        .background(uiState.pokemon!!.getBackgroundColor())
+                        //.verticalScroll(rememberScrollState())
+                ) {
+                    Header(
+                        pokemon = uiState.pokemon
+                            ?: throw Exception("Error in PokemonDetailsScreen::PokemonDetailsScreen()")
+                    )
+                    if (uiState.isLoading) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.padding(it))
+                        }
+                    } else {
                         PokemonImages(
                             previousPokemonUrl = uiState.previousPokemonImageUrl,
                             currentPokemonUrl = uiState.pokemon!!.imageUrl,
                             nextPokemonUrl = uiState.nextPokemonImageUrl
                         )
-                        DataCard()
+                    }
 
+                    DataCard()
+                }
+
+                if(uiState.error != null){
+                    LaunchedEffect(scope) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(uiState.error!!)
+                        }
                     }
                 }
 
@@ -263,7 +272,6 @@ private fun PokemonImages(
                     .align(Alignment.CenterStart)
                     .size(100.dp)
                     .offset(x = (-52).dp)
-                    .zIndex(5f)
             )
         }
 
@@ -273,7 +281,6 @@ private fun PokemonImages(
             modifier = Modifier
                 .size(pokemonImageWidth, pokemonImageHeight)
                 .offset(y = 0.dp)
-                .zIndex(5f)
                 .scale(1.1F)
         )
 
@@ -287,7 +294,6 @@ private fun PokemonImages(
                     .align(Alignment.CenterEnd)
                     .size(100.dp)
                     .offset(x = 60.dp)
-                    .zIndex(5f)
             )
         }
     }
@@ -296,8 +302,8 @@ private fun PokemonImages(
 @Composable
 fun DataCard(modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        //colors = CardDefaults.cardColors(Color.White),
+        modifier = modifier.fillMaxHeight(),
+        colors = CardDefaults.cardColors(Color.White),
         shape = MaterialTheme.shapes.extraLarge.copy(
             bottomStart = CornerSize(0.dp),
             bottomEnd = CornerSize(0.dp)
@@ -356,9 +362,10 @@ private fun PokemonDetailsPager(modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        with(context) {
+                        color = Color.White,
+                        text = with(context) {
                             if (isLandscape) {
-                                stringResource(PokemonDetailsTabs.entries[selectedTabIndex.value].textLandscapeId!!)
+                                PokemonDetailsTabs.entries[selectedTabIndex.value].getLandscapeText()
                             } else {
                                 PokemonDetailsTabs.entries[selectedTabIndex.value].getText()
                             }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -25,10 +24,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -50,6 +54,7 @@ import com.nebulavision.pokedexcompose.model.Pokemon
 import com.nebulavision.pokedexcompose.ui.screen.common.CircularProgressBox
 import com.nebulavision.pokedexcompose.ui.screen.common.EndlessLazyVerticalGrid
 import com.nebulavision.pokedexcompose.ui.theme.PokedexComposeTheme
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 
@@ -61,13 +66,16 @@ fun PokedexScreen(
 ) {
     val viewmodel: PokedexViewModel = hiltViewModel()
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     viewmodel.fetchMore(context.isNetworkAvailable, Locale.getDefault().language)
 
     PokedexComposeTheme {
         Scaffold(
             modifier = Modifier,
-            topBar = { AppTopBar { onBackClicked() } }
+            topBar = { AppTopBar { onBackClicked() } },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
         ) { padding ->
             EndlessLazyVerticalGrid(
                 modifier = Modifier
@@ -94,6 +102,14 @@ fun PokedexScreen(
                     )
                 }
             )
+
+            if(uiState.error != null){
+                LaunchedEffect(scope) {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(uiState.error!!)
+                    }
+                }
+            }
         }
     }
 }

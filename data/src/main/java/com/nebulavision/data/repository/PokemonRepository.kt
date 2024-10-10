@@ -1,6 +1,5 @@
 package com.nebulavision.data.repository
 
-import android.util.Log
 import com.google.gson.JsonParseException
 import com.nebulavision.data.database.dao.PokemonDao
 import com.nebulavision.data.database.entity.PokemonEntity
@@ -159,7 +158,6 @@ class PokemonRepository @Inject constructor(
         val genra = pokemon.genera.first { genra ->
             genra.language.name == "es"
         }
-        Log.d("REPO","https://img.pokemondb.net/sprites/home/normal/${normalizeNameForImageUrl(pokemon.enName)}.png")
         val pokemonEntity = PokemonEntity(
             id = pokemon.id,
             name = pokemon.name,

@@ -13,5 +13,10 @@ enum class PokemonDetailsTabs (@StringRes val textId: Int, @StringRes val textLa
 
 context(Context)
 fun PokemonDetailsTabs.getText(): String{
-    return getString(this.textId)
+    return getString(textId)
+}
+
+context(Context)
+fun PokemonDetailsTabs.getLandscapeText(): String{
+    return getString(textLandscapeId ?: textId)
 }
